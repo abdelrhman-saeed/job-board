@@ -73,6 +73,18 @@ docker run -d --name memcached -p 11211:11211 memcached:latest
 
 ```bash
 php artisan migrate:fresh --seed
+
+## Default Companies and Candidates are:
+
+Companies:
+1- email: company@mail.com
+2- email: company2@mail.com
+
+Candidates:
+1- email: candidate@mail.com
+2- email: candidate2@mail.com
+
+passowrd: "password"
 ```
 
 ### 9. Passport Installation
@@ -201,6 +213,11 @@ sudo ln -s /etc/nginx/sites-available/job-board /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 ```
+## Postman Collection
+
+You can test the API using the provided Postman collection:
+
+[🔗 Download Collection](./JobBoard.postman_collection.json)
 
 ---
 

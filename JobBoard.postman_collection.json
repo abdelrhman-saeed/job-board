@@ -1,0 +1,394 @@
+{
+	"info": {
+		"_postman_id": "e51fd8cd-94fb-45bd-a669-f1faac54b0a2",
+		"name": "Job Board",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41468862"
+	},
+	"item": [
+		{
+			"name": "job posts",
+			"item": [
+				{
+					"name": "create job",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"developer\",\n    \"min_salary\": \"5000\",\n    \"max_salary\": \"10000\",\n    \"description\": \"there\",\n    \"location\": \"location\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/jobs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update job",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"developer\",\n    \"min_salary\": \"800\",\n    \"max_salary\": \"23333\",\n    \"description\": \"description updated\",\n    \"location\": \"location updated\",\n    \"is_remote\": 1,\n    \"publish\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/jobs/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete job",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"title-updated\",\n    \"min_salary\": \"800\",\n    \"max_salary\": \"23333\",\n    \"description\": \"description updated\",\n    \"location\": \"location updated\",\n    \"is_remote\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/jobs/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list company jobs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/jobs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "is_remote",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "soft",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "there",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "location",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show company job",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/jobs/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "job applications",
+			"item": [
+				{
+					"name": "apply",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{candiddate_auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "resume_url",
+									"type": "file",
+									"src": "/home/abdelrhman/Downloads/Laravel Backend Engineer – Assessment.pdf"
+								},
+								{
+									"key": "cover_letter_url",
+									"type": "file",
+									"src": "/home/abdelrhman/Downloads/Laravel Backend Engineer – Assessment.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/jobs/2/apply",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								"2",
+								"apply"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list candidate jobs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5ZWJjODlhMy1jNDNjLTRhMGYtYWZkOC1lNDc3NzRmY2U3N2QiLCJqdGkiOiI2NjZkOGMyNDliNDQxNjRlNDM0YWE1NjAyOWFiMDBkZmVhODNkZDkyMGM0ZGFhMjQwZmY3ZjA0OGFkMzMxYzU5NDBjNjRmMjFlZjJhM2Q4ZSIsImlhdCI6MTc0NTMzMTgxNy40ODIxMjcsIm5iZiI6MTc0NTMzMTgxNy40ODIxMzEsImV4cCI6MTc3Njg2NzgxNy40NzIzNDEsInN1YiI6IjEiLCJzY29wZXMiOlsiKiJdfQ.t1sw9HYcz-lSymYCOY4hIkFp-C7aJhcr1hGh39EAdf9mYLnt3KzReIcUA4wXX8hMBEPxI-26L3p40WcH23vc2I6-8YoiQTWqQRmiQ0_RsBbswcvp-hn43enuRjBqHqGJrex0IH5w8AW71QbdAcoSImx4izu2WjYrO9n9JTEgHliwzTBFf7lrqR0to2QKDx-8yDR0G-sr34MJ3QOV0x2hqj6jsTSPc5YYSQF3AwRvONBvEG4sTNWQ6ebMoq8uQ8kEXTiSvqS5xoHrsUanSKohDH9YN3J1-eE6cnLw4dZ-68WB-Y9s5MR27KjTrpoakaZXXSUfdCJcTe_GfM_ntPBfm3GSnE3lzpy0RmdULRfY1vQ4Fol5mu2wWK_UJfRI_eRb5e5kNn46ztTepu-u5QohTOgqfwAotJtSNs_ecWDpAcnMz184aAQrksHtMtux70ecTweMQ1_8VcHOHjtoSc9slI38jt-VtN23am0hF_JpXx00uGFM5EUIspsCKHGj17MzInGomv6nTa4O3O_DQo5b8_cueByCMitNacfZlu7quGYp6EwWftvGjs9Ds3sUfqk6V-qf2KgOQZQa0BQ5rinmWDYG1ckXnPl7_LvliEMM1JCEYk4Engj-r0I-DuC0GBecPOJ5lXsEE_L-57n0Afjslmr79xFsCmXebeIC4ytsAz8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/candidate/jobs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"candidate",
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login as a company",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hill.araceli@example.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/company/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login as a candidate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"buddy.parisian@example.net\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/candidate/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"candidate",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "request refresh token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{refresh_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/oauth/token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5ZWJjODlhYS0zNDUyLTRjZmYtOWY3My00N2UwYmJkOWUzMDQiLCJqdGkiOiI0NjA5NzVhMjc1YTQ2OTJiOThjNGMyNTdmMTJiNTgyODI4OGE5MzcxZGI1Y2M3NzVmYzIwOTRjMTkxNzc5YWFkNzQzMTc2NDg3Njc3MTlmYiIsImlhdCI6MTc0NTMyNjA3My44NTM1MDMsIm5iZiI6MTc0NTMyNjA3My44NTM1MDYsImV4cCI6MTc3Njg2MjA3My44MTQwNjIsInN1YiI6IjEiLCJzY29wZXMiOlsiKiJdfQ.1qiJPrZY1co2ESGVrPhKb3XNzNI_4f-9mZVbaA5pg2JLpgHEPlFm6FzrufLLxlIqoiND2EgYXtd7Cfp7UZjI6tFAnDQ3BTTI-2-bitlFo_JOR1jUPQsfSehtjFMqFC3FfKrNpKc-ne6QDbPzO_zZdIjWxpIcbICqDs6-blzTM-kWDI8mBDtBloDY2LZwb-9bg_UIwC1_cvLc1EhuoxAlRk97cvqG6p79Jr6lkgh9vRChcsXPUPWj0ibxMzIBleRLJXQLsOtfeBEzmfLDIKBzX5D_wCLilsOtOQfFrJ3vP1-rmB359tsZuwmvvzwJw51DFL_GcrzGTZqIw6zJFIv2lRv-hHDxGi3Bfp9WUHByG-4SRJXlh34nRnHNkzD_3Zln0BR9Iwv4NfPxLDKHjidy0p2sKeVhJ78vyKsV1Ur1mionNpT2ZTOa80rmRYgC_sFG5l4a4meCcjgqA3HoYAmTTv-9mo8ckfRgLEVETDkRdieApbpmCXA8bSBP3ATpTsaT4XzxlEt00Z_uWHAksoRnggrFHuF3MTo2AOLXmAScUiMaSR-l8OwoQFNc57NRLqlNlQVCPxEv4Rh0z64UFEr0-s1YdTFge8fVmnwx8vevdHTtOHAwqszkB49IpW88TzyqVzNk0zlTG4twp9Inp4p95yt2j5Lp2I2Rs--7YHZhvxY",
+			"type": "string"
+		},
+		{
+			"key": "candiddate_auth_token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5ZWJjYmM1MC05MWJkLTRiY2YtYWNmMy00NGNiZjczNGYyZmQiLCJqdGkiOiI3NTkzYzAzZGMwYThjZTBmMjA5M2Y2MTYwMGJkN2QyMzQwOWU3NzE5ZTlhZjc5YzZkNzgxNzc5NDIwM2FiYTI3YzIwMzRkMTI1OTE3YWViNSIsImlhdCI6MTc0NTMzNTU0MC4zNjAyMzksIm5iZiI6MTc0NTMzNTU0MC4zNjAyNDQsImV4cCI6MTc3Njg3MTU0MC4zNDQzNTMsInN1YiI6IjEiLCJzY29wZXMiOlsiKiJdfQ.lO9MZM1meP_8nwONwmx9mZDWmvFErAyHFkjOw8cSE-CCO6Y7YNcFw4DmifkLs2QX3dC-6PZEr4QOw6S71edae8wUPA8OAtu1teObRVTld1oZt8WFlKrB5mqYv9uvhivV_YDgINXfgimBL0yfNyidVN8SJoJXZO9pM1OSrNzH5nBbAGvGJeFxV_ZqxiXJlT5Afh-v2_wZI3FCxo3qPGnwF2oZZ8vVhJSC-ZOx3rluRUEfgHdLaH6PCbp9quVDeVcYD7B6vSxmxNtXDSlfq6zYdSRQaQsTOCEcUZG7_6qd1Iqb_hRikrATlDj7LkVmrc_fbkEDOxomKBTMuOW6XqsCqS39rk9lOIRS7P-HHdiTV8aK4eRYqF9mREwijn8BufG7AMqysHEBGPuxcssc3m0A8tNRa48yqqVJV8ir4HYSIywVmqJpQiptB2zlO9cZhRWbPXsbZn76E61yworlfSjRS07Jp018Exkx9yIcWrvMYUtCIGCTc6tmS8Z-UhlkjnWFH_xP_7yYV47XC_Z6oTk6Xca7kWsfsgcVSBIi7NLeyoVGOS-teybJUS6d-EJimPd8uuQ2Vx74O__T96uhnL-QPc3FG6iJUDkXd3hrsFtxi7wqWfaXahgAp4o4RXETeb8BikZewI5_61srdnRCs3K-h_cK-68jqxjoNg8EuCUN0x4",
+			"type": "string"
+		},
+		{
+			"key": "refresh_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
