@@ -1,61 +1,242 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Job Board
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel 12-based RESTful API project for managing job listings and applications.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Setup Instructions
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3+
+- Composer
+- MySQL (via Docker container)
+- Docker
 
-## Learning Laravel
+### 1. Clone the Repository
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+git clone https://github.com/abdelrhman-saeed/job-board.git
+cd job-board
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 2. Install Dependencies
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+composer install
+```
 
-## Laravel Sponsors
+### 3. Copy Environment File
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+cp .env.example .env
+```
 
-### Premium Partners
+### 4. Configure `.env`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+Adjust database credentials:
 
-## Contributing
+```
+DB_CONNECTION=mysql
+DB_HOST=mysql-container
+DB_PORT=3306
+DB_DATABASE=job_board
+DB_USERNAME=root
+DB_PASSWORD=secret
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+QUEUE_CONNECTION=database
 
-## Code of Conduct
+CACHE_STORE=memcached
+MEMCACHED_HOST=127.0.0.1
+MEMCACHED_PORT=11211
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 5. Generate Application Key
 
-## Security Vulnerabilities
+```bash
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 6. Run MySQL Docker Container
 
-## License
+```bash
+docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=secret -p 3306:3306 -d mysql:latest
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 7. Run Memcached Docker Container
+
+```bash
+docker run -d --name memcached -p 11211:11211 memcached:latest
+```
+
+### 8. Run Migrations and seeders
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+### 9. Passport Installation
+
+```bash
+php artisan passport:keys
+
+php artisan passport:client --password --provider=companies --name="Company Password Client"
+
+INFO  Password grant client created successfully.  
+
+Here is your new client secret. This is the only time it will be shown so do not lose it!
+
+Client ID ........................................................... Company Client id Placeholder
+Client secret ................................................... Company Client Secret Placeholder
+
+php artisan passport:client --password --provider=candidates --name="Candidate Password Client"
+
+INFO  Password grant client created successfully.  
+
+Here is your new client secret. This is the only time it will be shown so do not lose it!
+
+Client ID ........................................................... Candidate Client id Placeholder
+Client secret ................................................... Candidate Client Secret Placeholder
+```
+
+### 10. copy the client id and clients secret to the .env file
+
+```bash
+# .env
+PASSPORT_COMPANY_PERSONAL_ACCESS_CLIENT_ID="Company Client id Placeholder"
+PASSPORT_COMPANY_PERSONAL_ACCESS_CLIENT_SECRET="Company Client secret Placeholder"
+
+PASSPORT_CANDIDATE_PERSONAL_ACCESS_CLIENT_ID="Candidate Client id Placeholder"
+PASSPORT_CANDIDATE_PERSONAL_ACCESS_CLIENT_SECRET="Candidate Client secret Placeholder"
+```
+
+### 11. Set storage permissions
+
+```bash
+sudo chown -R www-data:www-data /path/to/your/project/storage
+
+sudo find /path/to/your/project/storage -type d -exec chmod 775 {} \;
+sudo find /path/to/your/project/storage -type f -exec chmod 664 {} \;
+```
+
+### 12. Run Queue Worker (optional)
+
+```bash
+php artisan queue:work
+```
+
+---
+
+## API Endpoints
+
+> Authentication
+
+```http
+obtain access token (JWT)
+
+POST    /api/company/login
+POST    /api/candidate/login
+
+obtain refresh token
+
+POST    /api/token/refresh
+```
+
+> Job CRUD
+
+```http
+GET         /api/jobs
+GET         /api/jobs/{job}
+POST        /api/jobs
+PUT         /api/jobs/{job}
+DELETE      /api/jobs/{job}
+```
+
+> Job Applications
+
+```http
+POST        /api/jobs/{job}/apply
+GET         /api/candidate/jobs
+```
+
+---
+
+## Nginx Configuration
+
+Place this inside your Nginx config directory (e.g., `/etc/nginx/sites-available/job-board`):
+> Note: you need to stop the apache service if you got it installed.
+
+```nginx
+server {
+    listen 8000;
+    server_name 127.0.0.1;
+
+    root The path to the project public directory
+    index index.php index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    error_log /var/log/nginx/job-board_error.log;
+    access_log /var/log/nginx/job-board_access.log;
+}
+```
+
+### Enable and Restart Nginx
+
+```bash
+sudo ln -s /etc/nginx/sites-available/job-board /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+---
+
+## You're All Set
+
+## Design Choices
+
+In this project, I chose to implement a modular approach, focusing on clean and maintainable code. The use of Laravel Passport ensures secure authentication with JWT tokens for both company and candidate users. I've also leveraged Laravel queues for handling background tasks to improve performance and ensure that long-running tasks do not block the main application flow.
+
+Authentication: I've used passport for user authentication.
+
+Database: The database configuration uses MySQL running in a Docker container for easy setup and portability.
+It ensures consistency across environments.
+
+Queues: Laravel's queue system was set up for handling background tasks like email notifications, ensuring that requests are not delayed by resource-intensive processes.
+
+Separation of Concerns: I've followed MVC principles, organizing the logic in controllers, models, and views, with clear boundaries between them for easier testing and maintenance.
+
+## Assumptions
+
+Database Availability: The application assumes that a MySQL Docker container is already set up and running. The environment variable for database credentials should be set correctly in the .env file.
+
+Environment: It's assumed that the application is being deployed on a Unix-like environment, with a proper Nginx and PHP-FPM setup. The Nginx configuration provided is based on the assumption that the public folder is the root directory.
+
+Authentication Setup: The Laravel Passport authentication is assumed to be installed and configured correctly, including client ID and client secret, which should be defined in the .env file.
+
+No heavy traffic initially: The current setup assumes moderate usage, so no high-availability configurations like load balancers or caching layers are added at this point.
+
+## Improvements
+
+Caching: To improve performance, especially for frequently accessed data like job posts or user details, I would implement caching mechanisms, either through Laravel’s built-in caching or by using Redis.
+
+Rate Limiting: For security and to prevent abuse of the API, I would introduce rate limiting for certain endpoints (like authentication or job applications).
+
+Testing: Although the app is functional, adding more unit and feature tests to ensure its stability and reliability across various use cases would be a great improvement.
+
+Error Handling & Logging: I would enhance error handling and logging, especially for unexpected failures in queues or external API calls.
+
+Scalability: The current setup would need adjustments for handling a large number of users or heavy traffic, such as adding database replication, load balancing, and horizontal scaling for the queue system.
