@@ -3,19 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobPost;
+use Closure;
 use Illuminate\Http\Request;
 use App\Http\Requests\JobPostRequest;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use  App\Http\Middleware\ISAuthenticated;
 
 
-class JobPostController extends Controller
+class JobPostController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(ISAuthenticated::class, only: ['index']),
+            new Middleware('auth:company', except: ['index']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return JobPost::filter(request()->only(['title', 'location', 'is_remote', 'description']))
-            ->paginate(10);
+        return \Cache::remember("job_posts", 300, function ()
+            {
+                return JobPost::filter(request()->only(['title', 'location', 'is_remote', 'description']))
+                        ->withCount('applications as applications')
+                        ->paginate(10);
+            }
+        );
+
     }
 
     /**
@@ -71,6 +88,6 @@ class JobPostController extends Controller
                     ->json(['message' => 'job is deleted succussfully'], 410);
         }
 
-        return response()->json(['message' => 'job is deleted succussfully'], 500);
+        return response()->json(['message' => 'Server error!'], 500);
     }
 }

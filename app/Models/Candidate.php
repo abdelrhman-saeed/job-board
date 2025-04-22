@@ -48,4 +48,9 @@ class Candidate extends Authenticatable
     {
         return $this->belongsToMany(JobPost::class, 'job_applications', 'candidate_id');
     }
+
+    // public function jobPosts(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(JobApplication::class, 'job_')
+    // }
 }

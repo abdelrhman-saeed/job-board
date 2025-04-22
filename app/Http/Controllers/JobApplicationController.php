@@ -8,7 +8,6 @@ use App\Jobs\ProcessJobPostApplication;
 
 class JobApplicationController extends Controller
 {
-
     public function apply(Request $request, int $id)
     {
         /**
@@ -32,6 +31,11 @@ class JobApplicationController extends Controller
             ->store('temp/cover_letters', 'public');
 
         ProcessJobPostApplication::dispatch($resumePath, $coverLetterPath, $id, auth()->user());
+    }
+
+    public function getAppliedJobs()
+    {
+        return auth()->user()->jobs;
     }
 
 }

@@ -12,4 +12,9 @@ class JobApplication extends Model
         'resume_url',
         'cover_letter_url',
     ];
+
+    public function job(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(JobPost::class, 'job_post_id');
+    }
 }
