@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobApplicationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobPostController;
@@ -16,3 +17,6 @@ Route::post('{entity}/login', [AuthController::class, 'login'])
 
 Route::resource('jobs', JobPostController::class)
     ->middleware('auth:company');
+
+Route::post('jobs/{job}/apply', [JobApplicationController::class,'apply'])
+    ->middleware('auth:candidate');
